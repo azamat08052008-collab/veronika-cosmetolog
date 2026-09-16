@@ -1,0 +1,15 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;overflow:hidden}iframe{border:0;width:1440px;height:900px;display:block}</style></head>
+<body>
+<iframe id="f" src="/?shot=frame"></iframe>
+<script>
+  const id = new URLSearchParams(location.search).get('to');
+  document.getElementById('f').addEventListener('load', () => {
+    const w = document.getElementById('f').contentWindow;
+    w.document.documentElement.style.scrollBehavior = 'auto';
+    w.document.querySelectorAll('.reveal').forEach((e) => { e.style.transition = 'none'; e.classList.add('in'); });
+    w.document.querySelectorAll('[data-count]').forEach((e) => { e.textContent = e.dataset.count.replace('.', ','); });
+    if (id && id !== 'top') setTimeout(() => { w.document.getElementById(id).scrollIntoView(); }, 300);
+  });
+</script>
+</body></html>
