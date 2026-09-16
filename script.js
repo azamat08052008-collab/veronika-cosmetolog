@@ -98,13 +98,15 @@ document.getElementById('faq-list').innerHTML = FAQ.map((f) => `
 const book = document.getElementById('book');
 const bookService = document.getElementById('book-service');
 const bookWa = document.getElementById('book-wa');
+const bookTg = document.getElementById('book-tg');
 document.addEventListener('click', (e) => {
   const btn = e.target.closest('[data-book]');
   if (!btn) return;
   const service = btn.dataset.book;
   bookService.textContent = service ? `Услуга: ${service}` : 'Напишите, и Вероника подберёт время';
-  const text = service ? `Здравствуйте! Хочу записаться: ${service}` : 'Здравствуйте! Хочу записаться на приём';
-  bookWa.href = `https://wa.me/79179097604?text=${encodeURIComponent(text)}`;
+  const text = encodeURIComponent(service ? `Здравствуйте! Хочу записаться: ${service}` : 'Здравствуйте! Хочу записаться на приём');
+  bookWa.href = `https://wa.me/79179097604?text=${text}`;
+  bookTg.href = `https://t.me/Veronika_cosmetolog?text=${text}`;
   book.showModal();
 });
 book.addEventListener('click', (e) => { if (e.target === book) book.close(); });
