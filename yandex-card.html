@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Макет карточки в Яндекс Картах: Косметолог Вероника</title>
+  <meta name="robots" content="noindex">
+  <style>
+    :root { --text: #1a1a1a; --muted: #7f8285; --line: #e6e8eb; --link: #1a5cff; --green: #1b9d4b; --star: #ffb800; --bg: #f2f3f5; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 14px/1.4 "YS Text", -apple-system, "Segoe UI", Arial, sans-serif; color: var(--text); background: var(--bg); }
+    .banner { position: sticky; top: 0; z-index: 5; background: #1a1a1a; color: #fff; font-size: 13px; padding: 8px 16px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+    .banner b { color: #ffd54a; }
+    .banner a { color: #fff; }
+    .stage { position: relative; height: calc(100vh - 36px); min-height: 720px; overflow: hidden; }
+    .map { position: absolute; inset: 0; }
+    .map iframe { width: 100%; height: 100%; border: 0; filter: saturate(.9); }
+    .panel { position: absolute; left: 16px; top: 16px; bottom: 16px; width: 420px; background: #fff; border-radius: 16px; box-shadow: 0 8px 32px rgba(0, 0, 0, .18); overflow-y: auto; scrollbar-width: thin; }
+    .head { padding: 20px 20px 0; }
+    .head h1 { margin: 0; font-size: 24px; line-height: 1.2; font-weight: 700; }
+    .cat { color: var(--muted); margin-top: 2px; }
+    .rate { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+    .rate b { font-size: 16px; }
+    .stars { color: var(--star); letter-spacing: -1px; }
+    .rate span, .open { color: var(--muted); }
+    .open { margin-top: 4px; }
+    .open i { font-style: normal; color: var(--green); font-weight: 600; }
+    .actions { display: flex; gap: 8px; padding: 14px 20px 0; }
+    .actions button { flex: 1; height: 40px; border-radius: 12px; border: 0; font: 600 14px "YS Text", Arial, sans-serif; cursor: pointer; background: #f2f3f5; color: var(--text); }
+    .actions .primary { background: var(--link); color: #fff; }
+    .tabs { display: flex; gap: 20px; padding: 16px 20px 0; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: #fff; z-index: 2; }
+    .tabs a { padding: 8px 0 12px; color: var(--muted); text-decoration: none; font-weight: 500; white-space: nowrap; }
+    .tabs a small { color: var(--muted); margin-left: 4px; font-weight: 400; }
+    .tabs a.on { color: var(--text); border-bottom: 2px solid var(--text); }
+    .tabs a.new { color: var(--link); }
+    section { padding: 18px 20px; border-bottom: 8px solid var(--bg); }
+    h2 { margin: 0 0 12px; font-size: 18px; font-weight: 700; }
+    .row { display: flex; gap: 12px; align-items: flex-start; padding: 8px 0; }
+    .row .ic { width: 22px; height: 22px; flex: none; color: var(--muted); }
+    .row a { color: var(--link); text-decoration: none; }
+    .row small { display: block; color: var(--muted); }
+    .metro { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #d52b1e; margin-right: 6px; }
+    .chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; margin-bottom: 8px; }
+    .chips span { flex: none; padding: 7px 12px; border-radius: 999px; background: #f2f3f5; font-size: 13px; white-space: nowrap; }
+    .chips span.on { background: var(--text); color: #fff; }
+    .group { margin-top: 14px; }
+    .group h3 { margin: 0 0 4px; font-size: 15px; font-weight: 700; }
+    .item { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+    .item:last-child { border-bottom: 0; }
+    .item small { display: block; color: var(--muted); }
+    .item b { white-space: nowrap; font-weight: 600; }
+    .more { color: var(--link); padding: 8px 0 0; display: inline-block; text-decoration: none; }
+    .desc { white-space: pre-line; }
+    .feat { display: flex; flex-wrap: wrap; gap: 8px; }
+    .feat span { padding: 6px 10px; border-radius: 8px; background: #f2f3f5; font-size: 13px; }
+    .photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+    .photos img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; }
+    .photos .big { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
+    .review { padding: 10px 0; border-bottom: 1px solid var(--line); }
+    .review:last-child { border-bottom: 0; }
+    .review .who { display: flex; justify-content: space-between; font-weight: 600; }
+    .review .who span { color: var(--muted); font-weight: 400; font-size: 13px; }
+    .review .stars { font-size: 13px; }
+    .review p { margin: 6px 0 0; }
+    .msgs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .msgs a { padding: 7px 12px; border-radius: 999px; background: #f2f3f5; color: var(--text); text-decoration: none; font-size: 13px; font-weight: 500; }
+    .note { position: absolute; right: 16px; bottom: 16px; width: 300px; background: #fff; border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, .18); padding: 14px 16px; font-size: 13px; }
+    .note b { display: block; margin-bottom: 6px; }
+    .note ul { margin: 0; padding-left: 18px; }
+    .note li { margin: 4px 0; }
+    @media (max-width: 900px) {
+      .stage { height: auto; }
+      .map { display: none; }
+      .panel { position: static; width: auto; margin: 12px; }
+      .note { position: static; width: auto; margin: 0 12px 12px; }
+    }
+  </style>
+</head>
+<body>
+<div class="banner"><b>Макет</b> Так будет выглядеть карточка «Косметолог Вероника» в Яндекс Картах после заполнения в Яндекс Бизнесе. Цены и тексты из прайса на taplink. <a href="https://yandex.ru/maps/org/kosmetolog_veronika/94350685210/" target="_blank" rel="noopener">Текущая карточка</a></div>
+<div class="stage">
+  <div class="map"><iframe src="https://yandex.ru/map-widget/v1/?ll=49.083606%2C55.851995&z=17&pt=49.083606%2C55.851995%2Cpm2dbm" title="Карта"></iframe></div>
+
+  <aside class="panel">
+    <div class="head">
+      <h1>Косметолог Вероника</h1>
+      <div class="cat">Косметология · Салон красоты</div>
+      <div class="rate"><b>4,8</b><span class="stars">★★★★★</span><span>34 оценки · 30 отзывов</span></div>
+      <div class="open"><i>Открыто</i> · до 18:00</div>
+    </div>
+    <div class="actions">
+      <button class="primary" type="button">Маршрут</button>
+      <button type="button">Позвонить</button>
+      <button type="button">Записаться</button>
+      <button type="button">Сохранить</button>
+    </div>
+    <nav class="tabs">
+      <a class="on" href="#o">Обзор</a>
+      <a class="new" href="#prices">Цены<small>33</small></a>
+      <a href="#photos">Фото<small>33</small></a>
+      <a href="#reviews">Отзывы<small>30</small></a>
+      <a href="#feat">Особенности</a>
+    </nav>
+
+    <section id="o">
+      <div class="row"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"/></svg><div>ул. Копылова, 3, Казань<small><span class="metro"></span>Авиастроительная · 172 м</small></div></div>
+      <div class="row"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M12 7v5l3 3"/></svg><div>До 18:00, по записи<small>Точный график по дням заполнить в Яндекс Бизнесе</small></div></div>
+      <div class="row"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2"/></svg><div><a href="tel:+79179097604">+7 (917) 909-76-04</a></div></div>
+      <div class="row"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M3.6 9h16.8M3.6 15h16.8M11.5 3a17 17 0 0 0 0 18M12.5 3a17 17 0 0 1 0 18"/></svg><div><a href="https://azamat08052008-collab.github.io/veronika-cosmetolog/" target="_blank" rel="noopener">veronika-cosmetolog</a><small>Сайт с ценами и записью</small>
+        <div class="msgs"><a href="https://t.me/Veronika_cosmetolog">Написать в Telegram</a><a href="https://wa.me/79179097604">WhatsApp</a></div></div></div>
+    </section>
+
+    <section id="prices">
+      <h2>Цены</h2>
+      <div class="chips" id="chips"></div>
+      <div id="groups"></div>
+    </section>
+
+    <section>
+      <h2>О компании</h2>
+      <p class="desc">Косметолог Вероника принимает в кабинете у метро Авиастроительная. Чистки, пилинги, микронидлинг, биоревитализация, контурная пластика, ботулинотерапия, коллагеновое омолаживание, нити, Morpheus 8 и Lumecca.
+
+Сначала консультация 30 минут, потом понятный план без лишних назначений. Запись в Telegram или WhatsApp.</p>
+    </section>
+
+    <section id="feat">
+      <h2>Особенности</h2>
+      <div class="feat"><span>По предварительной записи</span><span>Консультация 30 мин</span><span>Анестезия при контурной пластике губ входит в стоимость</span><span>Рядом с метро</span><span>Можно с собакой</span></div>
+    </section>
+
+    <section id="photos">
+      <h2>Фото <span style="color:var(--muted);font-weight:400">33</span></h2>
+      <div class="photos">
+        <img class="big" src="img/cabinet/hero-wide.jpg" alt="">
+        <img src="img/about.jpg" alt=""><img src="img/cabinet/gigi-shelf.jpg" alt=""><img src="img/cabinet/2.jpg" alt="">
+        <img src="img/works/01.jpg" alt=""><img src="img/works/12.jpg" alt=""><img src="img/works/03.jpg" alt="">
+      </div>
+      <a class="more" href="#">Все фото</a>
+    </section>
+
+    <section id="reviews">
+      <h2>Отзывы <span style="color:var(--muted);font-weight:400">30</span></h2>
+      <div id="reviews-list"></div>
+      <a class="more" href="https://yandex.ru/maps/org/94350685210/reviews/" target="_blank" rel="noopener">Все отзывы</a>
+    </section>
+  </aside>
+
+  <div class="note">
+    <b>Что заполнить в Яндекс Бизнесе</b>
+    <ul>
+      <li>Прайс-лист: 5 категорий, 33 позиции с ценой и длительностью (вкладка «Цены» появится сама).</li>
+      <li>Описание «О компании» и точный график по дням.</li>
+      <li>Сайт и кнопка «Записаться» со ссылкой на Telegram.</li>
+      <li>Особенности: запись, консультация, способы оплаты.</li>
+      <li>Порядок фото: сначала кабинет и портрет, потом работы.</li>
+    </ul>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script>
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  document.getElementById('chips').innerHTML = ['Все', ...GROUPS.map((g) => g.title)].map((t, i) => `<span class="${i === 0 ? 'on' : ''}">${esc(t)}</span>`).join('');
+  document.getElementById('groups').innerHTML = GROUPS.map((g) => {
+    const items = SERVICES.filter((s) => s.group === g.id);
+    return `<div class="group"><h3>${esc(g.title)}</h3>${items.map((s) => `<div class="item"><div>${esc(s.name)}<small>${esc(s.duration)}</small></div><b>${esc(s.price)}</b></div>`).join('')}</div>`;
+  }).join('');
+  document.getElementById('reviews-list').innerHTML = REVIEWS.slice(0, 3).map((r) => `<div class="review"><div class="who">${esc(r.name)}<span>${esc(r.date)}</span></div><div class="stars">★★★★★</div><p>${esc(r.text)}</p></div>`).join('');
+</script>
+</body>
+</html>
