@@ -7,7 +7,8 @@
     "dev": "vite",
     "prebuild": "node scripts/sync-data.mjs",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && cd dist && git init -q && git checkout -q -b gh-pages && git add -A && git commit -q -m 'Сборка сайта' && git push -q -f https://github.com/azamat08052008-collab/veronika-cosmetolog.git gh-pages && cd .. && rm -rf dist/.git"
   },
   "dependencies": {
     "react": "^19.1.0",
