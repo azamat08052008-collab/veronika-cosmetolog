@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MVP 2 · Светлая студия</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #f8f6f1; --bg2: #efebe3; --ink: #23201c; --ink2: #6f6861; --sage: #6b7a63; --gold: #c9a26b; --line: rgba(35, 32, 28, .12); --serif: "Cormorant Garamond", serif; --sans: "Manrope", system-ui, sans-serif; --g: clamp(16px, 5vw, 80px); --ease: cubic-bezier(.22, 1, .36, 1); }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+    img { display: block; max-width: 100%; }
+    figure { margin: 0; }
+    h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: .96; letter-spacing: -.015em; margin: 0; text-wrap: balance; }
+    h1 { font-size: clamp(44px, 5.8vw, 88px); }
+    h2 { font-size: clamp(34px, 4vw, 56px); }
+    h3 { font-size: 24px; margin: 40px 0 6px; }
+    a { color: inherit; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 26px; border-radius: 4px; border: 1px solid var(--ink); background: transparent; color: var(--ink); font: 500 15px var(--sans); text-decoration: none; cursor: pointer; white-space: nowrap; transition: background .3s, color .3s; }
+    .btn:hover, .btn.fill { background: var(--ink); color: var(--bg); }
+    .btn.sage { background: var(--sage); border-color: var(--sage); color: #fff; }
+    .btn.sm { min-height: 36px; padding: 0 14px; font-size: 13px; }
+    .top { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 28px; height: 72px; padding: 0 var(--g); background: rgba(248, 246, 241, .85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+    .brand { font-family: var(--serif); font-size: 24px; text-decoration: none; }
+    .brand em { color: var(--sage); }
+    .nav { display: flex; gap: 22px; margin-left: auto; }
+    .nav a { text-decoration: none; color: var(--ink2); font-size: 15px; }
+    section { padding: clamp(64px, 9vw, 128px) var(--g); }
+    /* Hero: сплит, справа 3D кольцо над водой */
+    .hero { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 40px; min-height: calc(100dvh - 72px); padding-top: 32px; padding-bottom: 32px; }
+    .hero h1 em { font-style: italic; color: var(--sage); }
+    .hero p { color: var(--ink2); font-size: 18px; max-width: 40ch; margin: 22px 0 0; }
+    .hero .cta { display: flex; gap: 12px; margin-top: 32px; }
+    .facts { display: flex; gap: 32px; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink2); }
+    .facts b { display: block; font-family: var(--serif); font-size: 30px; color: var(--ink); line-height: 1; font-weight: 500; }
+    .scene { position: relative; height: min(72vh, 680px); border-radius: 6px; overflow: hidden; background: linear-gradient(180deg, #e9eef0 0%, #f4efe6 55%, #efe6d8 100%); }
+    .scene canvas { width: 100%; height: 100%; display: block; }
+    .scene figure { position: absolute; left: 6%; bottom: 6%; width: 30%; border-radius: 4px; overflow: hidden; box-shadow: 0 20px 50px -20px rgba(35, 32, 28, .5); }
+    /* Услуги: таблица */
+    .head { max-width: 60ch; margin-bottom: 8px; }
+    .head p { color: var(--ink2); margin: 12px 0 0; }
+    .srow { display: grid; grid-template-columns: 1fr auto auto; gap: 24px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); }
+    .srow small { display: block; color: var(--ink2); font-size: 13px; }
+    .srow b { font-family: var(--serif); font-size: 24px; font-weight: 500; white-space: nowrap; }
+    .srow .btn { border-color: var(--line); }
+    /* Работы: сетка */
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .grid figure { aspect-ratio: 1; border-radius: 4px; overflow: hidden; }
+    .grid img { width: 100%; height: 100%; object-fit: cover; }
+    /* Обо мне: бенто */
+    .about { background: var(--bg2); }
+    .bento { display: grid; grid-template-columns: 1.1fr 1fr 1fr; grid-template-areas: "p t t" "p a b"; gap: 12px; }
+    .bento figure { border-radius: 4px; overflow: hidden; }
+    .bento img { width: 100%; height: 100%; object-fit: cover; }
+    .bento .p { grid-area: p; } .bento .a { grid-area: a; aspect-ratio: 3/2; } .bento .b { grid-area: b; aspect-ratio: 3/2; }
+    .bento .t { grid-area: t; background: #fff; border-radius: 4px; padding: 32px; }
+    .bento .t p { color: var(--ink2); max-width: 48ch; }
+    /* Отзывы */
+    .reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    blockquote { margin: 0; padding-top: 18px; border-top: 1px solid var(--ink); }
+    blockquote p { font-family: var(--serif); font-size: 22px; line-height: 1.3; margin: 0 0 12px; }
+    cite { font-style: normal; color: var(--ink2); font-size: 13px; }
+    footer { padding: 48px var(--g); border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; color: var(--ink2); }
+    footer .cta { display: flex; gap: 10px; }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (max-width: 900px) { .hero, .reviews { grid-template-columns: 1fr; } .grid { grid-template-columns: 1fr 1fr; } .bento { grid-template-columns: 1fr; grid-template-areas: "p" "t" "a" "b"; } .nav { display: none; } .srow { grid-template-columns: 1fr auto; } .srow .btn { display: none; } .scene { height: 60vw; } }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+  </style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#">Косметолог <em>Вероника</em></a>
+  <nav class="nav"><a href="#services">Услуги</a><a href="#works">Работы</a><a href="#about">Обо мне</a><a href="#reviews">Отзывы</a><a href="#contacts">Контакты</a></nav>
+  <button class="btn fill" type="button" data-book="">Записаться</button>
+</header>
+
+<section class="hero">
+  <div>
+    <h1>Красивая кожа начинается <em>с консультации</em></h1>
+    <p>Уход, инъекции и аппаратные процедуры в кабинете у метро Авиастроительная. Сначала консультация, потом план.</p>
+    <div class="cta"><button class="btn sage" type="button" data-book="">Записаться</button><a class="btn" href="#services">Смотреть цены</a></div>
+    <div class="facts"><div><b>4,8</b>рейтинг на Яндекс Картах</div><div><b>30 мин</b>консультация</div><div><b>33</b>процедуры в прайсе</div></div>
+  </div>
+  <div class="scene"><canvas id="gate"></canvas><figure><img src="../img/about.jpg" alt="Вероника"></figure></div>
+</section>
+
+<section id="services">
+  <div class="head reveal"><h2>Услуги и цены</h2><p>Цена за одну процедуру. Курсы и препараты подбираются на консультации.</p></div>
+  <div id="services-list" class="reveal"></div>
+</section>
+
+<section id="works">
+  <div class="head reveal"><h2>Работы</h2><p>Губы, ботулинотерапия, чистки. Фото до и после из кабинета.</p></div>
+  <div class="grid reveal" id="works-grid"></div>
+</section>
+
+<section class="about" id="about">
+  <div class="bento reveal">
+    <figure class="p"><img src="../img/cabinet/hero-wide.jpg" alt="Кабинет"></figure>
+    <div class="t"><h2>Обо мне</h2><p>Веду приём в кабинете на Копылова, 3. Не назначаю процедуры, которые вам не нужны: сначала консультация, затем понятный план и сроки.</p></div>
+    <figure class="a"><img src="../img/cabinet/gigi-shelf.jpg" alt="GiGi"></figure>
+    <figure class="b"><img src="../img/cabinet/3.jpg" alt="Stylage"></figure>
+  </div>
+</section>
+
+<section id="reviews">
+  <div class="head reveal"><h2>Отзывы</h2><p>30 отзывов на Яндекс Картах.</p></div>
+  <div class="reviews reveal" id="reviews-list"></div>
+</section>
+
+<footer id="contacts">
+  <div>Казань, ул. Копылова, 3 / метро Авиастроительная / до 18:00 по записи<br><a href="tel:+79179097604">+7 917 909-76-04</a></div>
+  <div class="cta"><a class="btn sage" href="https://t.me/Veronika_cosmetolog">Telegram</a><a class="btn" href="https://wa.me/79179097604">WhatsApp</a></div>
+</footer>
+
+<script src="../data.js"></script>
+<script src="shared.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu" crossorigin="anonymous"></script>
+<script>
+renderServices(document.getElementById('services-list'), 'rows');
+renderWorks(document.getElementById('works-grid'), 8);
+renderReviews(document.getElementById('reviews-list'), 3);
+
+// Золотое кольцо над водой: тор + волнующаяся плоскость, курсор оставляет волну
+(() => {
+  const canvas = document.getElementById('gate');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(38, 1, .1, 60);
+  camera.position.set(0, 1.9, 9); camera.lookAt(0, .1, 0);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xcdbfa8, .8));
+  const sun = new THREE.DirectionalLight(0xfff2dc, 1.4); sun.position.set(3, 5, 4); scene.add(sun);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(1.7, .045, 24, 220), new THREE.MeshStandardMaterial({ color: 0xd8b58a, metalness: .55, roughness: .35, emissive: 0x8a6a3f, emissiveIntensity: .25 }));
+  ring.position.y = .55; scene.add(ring);
+  const wgeo = new THREE.PlaneGeometry(20, 12, 120, 70); wgeo.rotateX(-Math.PI / 2);
+  const wmat = new THREE.MeshStandardMaterial({ color: 0xaebfc6, metalness: .4, roughness: .45 });
+  const water = new THREE.Mesh(wgeo, wmat); water.position.y = -1.2; scene.add(water);
+  const base = wgeo.attributes.position.array.slice();
+  const resize = () => { const w = canvas.clientWidth, h = canvas.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); };
+  resize(); addEventListener('resize', resize);
+  const mouse = new THREE.Vector2(99, 99), target = new THREE.Vector2(99, 99);
+  const el = canvas.parentElement;
+  el.addEventListener('pointermove', (e) => { const r = el.getBoundingClientRect(); target.set(((e.clientX - r.left) / r.width - .5) * 14, ((e.clientY - r.top) / r.height - .5) * 8); });
+  el.addEventListener('pointerleave', () => target.set(99, 99));
+  const clock = new THREE.Clock();
+  const render = () => {
+    const t = clock.getElapsedTime(); mouse.lerp(target, .07);
+    const a = wgeo.attributes.position.array;
+    for (let i = 0; i < a.length; i += 3) {
+      const x = base[i], z = base[i + 2], d = Math.hypot(x - mouse.x, z - mouse.y);
+      a[i + 1] = Math.sin(x * .8 + t * .9) * .08 + Math.sin(z * 1.3 - t * .7) * .06 + Math.exp(-d * d * .35) * Math.sin(d * 3 - t * 4) * .22;
+    }
+    wgeo.attributes.position.needsUpdate = true; wgeo.computeVertexNormals();
+    ring.rotation.y = .35 + Math.sin(t * .25) * .18; ring.rotation.x = Math.sin(t * .3) * .05;
+    renderer.render(scene, camera);
+  };
+  if (reduce) return render();
+  const loop = () => { if (!document.hidden) render(); requestAnimationFrame(loop); }; loop();
+})();
+</script>
+</body>
+</html>

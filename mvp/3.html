@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MVP 3 · Розовое золото</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #f6efe6; --blush: #f5e1da; --peach: #f2d3b8; --sand: #e3c39f; --ink: #29241f; --ink2: #5c5147; --wine: #8f5a4a; --gold: #d9b27a; --line: rgba(41, 36, 31, .14); --serif: "Cormorant Garamond", serif; --sans: "Manrope", system-ui, sans-serif; --g: clamp(16px, 5vw, 72px); --ease: cubic-bezier(.22, 1, .36, 1); }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
+    img { display: block; max-width: 100%; }
+    figure { margin: 0; }
+    h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: .9; letter-spacing: -.03em; margin: 0; text-wrap: balance; }
+    h1 { font-size: clamp(56px, 9vw, 140px); }
+    h2 { font-size: clamp(36px, 4.8vw, 68px); }
+    h3 { font-size: 26px; margin: 36px 0 12px; }
+    a { color: inherit; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 26px; border-radius: 999px; border: 1px solid transparent; background: var(--ink); color: var(--bg); font: 600 15px var(--sans); text-decoration: none; cursor: pointer; white-space: nowrap; transition: transform .3s var(--ease); }
+    .btn.ghost { background: transparent; border-color: var(--ink); color: var(--ink); }
+    .btn.sm { min-height: 40px; padding: 0 16px; font-size: 13px; background: var(--ink); color: var(--bg); width: 100%; margin-top: auto; }
+    .top { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 28px; height: 72px; padding: 0 var(--g); background: rgba(246, 239, 230, .85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+    .brand { font-family: var(--serif); font-size: 24px; text-decoration: none; }
+    .brand em { font-style: italic; }
+    .nav { display: flex; gap: 22px; margin-left: auto; }
+    .nav a { text-decoration: none; color: var(--ink2); font-size: 15px; }
+    section { padding: clamp(64px, 9vw, 128px) var(--g); }
+    /* Hero: заголовок как герой, сфера за ним */
+    .hero { position: relative; min-height: calc(100dvh - 72px); padding-top: 24px; padding-bottom: 40px; display: grid; grid-template-rows: auto 1fr auto; overflow: hidden; }
+    .hero::before { content: ""; position: absolute; inset: -20%; background: radial-gradient(40% 50% at 20% 30%, var(--blush), transparent 65%), radial-gradient(36% 46% at 82% 18%, var(--peach), transparent 65%), radial-gradient(44% 54% at 66% 88%, rgba(217, 178, 122, .5), transparent 65%); filter: blur(48px); animation: mesh 22s ease-in-out infinite alternate; }
+    @keyframes mesh { to { transform: translate3d(5%, -4%, 0) rotate(6deg) scale(1.08); } }
+    #orb { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .hero > * { position: relative; }
+    .hero-top { display: flex; justify-content: space-between; color: var(--ink2); font-size: 14px; }
+    .hero-mid { display: grid; place-items: center; text-align: center; }
+    .hero h1 { max-width: 11ch; }
+    .hero h1 em { font-style: italic; color: var(--wine); }
+    .who { display: inline-flex; align-items: center; gap: 12px; margin-top: 32px; padding: 8px 18px 8px 8px; border-radius: 999px; background: rgba(246, 239, 230, .75); border: 1px solid var(--line); backdrop-filter: blur(8px); font-size: 15px; color: var(--ink2); }
+    .who img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; object-position: 50% 20%; }
+    .who b { color: var(--ink); }
+    .hero-bot { display: flex; justify-content: space-between; align-items: end; gap: 24px; }
+    .hero-bot p { max-width: 42ch; color: var(--ink2); margin: 0; font-size: 17px; }
+    .hero-bot .cta { display: flex; gap: 12px; }
+    .marquee { overflow: hidden; border-block: 1px solid var(--line); padding: 16px 0; background: linear-gradient(90deg, var(--bg), var(--blush), var(--bg)); }
+    .marquee div { display: flex; width: max-content; animation: mq 48s linear infinite; }
+    .marquee span { font-family: var(--serif); font-style: italic; font-size: 26px; color: var(--wine); padding: 0 36px; white-space: nowrap; }
+    .marquee span::after { content: "/"; margin-left: 36px; opacity: .45; font-style: normal; }
+    @keyframes mq { to { transform: translateX(-50%); } }
+    /* Услуги: цветные карточки */
+    .head { max-width: 60ch; margin-bottom: 8px; }
+    .head p { color: var(--ink2); margin: 12px 0 0; }
+    .sg { display: contents; }
+    .sg h3 { grid-column: 1 / -1; }
+    #services-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .scard { display: flex; flex-direction: column; gap: 8px; padding: 22px; border-radius: 16px; background: var(--c, var(--blush)); min-height: 200px; transition: transform .35s var(--ease); }
+    .scard:hover { transform: translateY(-4px) rotate(-.6deg); }
+    .scard h4 { margin: 0; font-family: var(--serif); font-size: 24px; font-weight: 600; line-height: 1.05; }
+    .scard .sp { font-family: var(--serif); font-size: 28px; font-weight: 600; color: var(--wine); }
+    .scard small { color: var(--ink2); }
+    .sg[data-group="care"] .scard { --c: #f5e1da; } .sg[data-group="peel"] .scard { --c: #f2d3b8; } .sg[data-group="needle"] .scard { --c: #e3c39f; }
+    .sg[data-group="inject"] .scard { --c: #29241f; color: #f6efe6; } .sg[data-group="inject"] .scard .sp { color: var(--sand); } .sg[data-group="inject"] .scard small { color: #cfc3b4; } .sg[data-group="inject"] .btn.sm { background: var(--sand); color: var(--ink); }
+    .sg[data-group="device"] .scard { --c: #6b4444; color: #f6efe6; } .sg[data-group="device"] .scard .sp { color: var(--peach); } .sg[data-group="device"] .scard small { color: #e2c8c0; } .sg[data-group="device"] .btn.sm { background: var(--peach); color: var(--ink); }
+    /* Работы: две ленты навстречу */
+    .works { padding-inline: 0; background: linear-gradient(180deg, #efe4d5, #f3e4dc); }
+    .works .head { padding: 0 var(--g); }
+    .strip { display: flex; gap: 12px; width: max-content; animation: mq 60s linear infinite; margin-top: 12px; }
+    .strip.rev { animation-direction: reverse; }
+    .strip figure { width: 240px; aspect-ratio: 1; border-radius: 14px; overflow: hidden; }
+    .strip img { width: 100%; height: 100%; object-fit: cover; }
+    /* Обо мне */
+    .about { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; background: var(--ink); color: var(--bg); }
+    .about h2 { color: var(--sand); }
+    .about p { color: #cfc3b4; font-size: 18px; max-width: 44ch; }
+    .about figure { border-radius: 18px; overflow: hidden; }
+    .stats { display: flex; gap: 32px; margin-top: 28px; }
+    .stats b { display: block; font-family: var(--serif); font-size: 48px; color: var(--sand); line-height: 1; }
+    .stats span { font-size: 14px; color: #cfc3b4; }
+    /* Отзывы */
+    .reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    blockquote { margin: 0; padding: 24px; border-radius: 16px; background: linear-gradient(160deg, #fff 40%, var(--blush)); border: 1px solid var(--line); }
+    blockquote p { font-family: var(--serif); font-size: 21px; line-height: 1.3; margin: 0 0 14px; font-weight: 600; }
+    cite { font-style: normal; color: var(--ink2); font-size: 13px; }
+    footer { padding: 64px var(--g) 28px; background: var(--ink); color: var(--bg); display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    footer .name { grid-column: 1 / -1; font-family: var(--serif); font-style: italic; font-size: clamp(56px, 16vw, 260px); line-height: .85; color: var(--sand); letter-spacing: -.03em; }
+    footer p { margin: 0 0 8px; color: #cfc3b4; }
+    footer .cta { display: flex; gap: 10px; justify-self: end; }
+    footer .btn { background: var(--sand); color: var(--ink); }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (max-width: 900px) { #services-list { grid-template-columns: 1fr 1fr; } .about, .reviews, footer { grid-template-columns: 1fr; } .nav { display: none; } .hero-bot { flex-direction: column; align-items: flex-start; } .hero-top { flex-direction: column; gap: 4px; } footer .cta { justify-self: start; } }
+    @media (max-width: 560px) { #services-list { grid-template-columns: 1fr; } }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } .marquee div, .strip, .hero::before { animation: none; } }
+  </style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#">Косметолог <em>Вероника</em></a>
+  <nav class="nav"><a href="#services">Услуги</a><a href="#works">Работы</a><a href="#about">Обо мне</a><a href="#reviews">Отзывы</a><a href="#contacts">Контакты</a></nav>
+  <button class="btn" type="button" data-book="">Записаться</button>
+</header>
+
+<section class="hero" id="hero">
+  <canvas id="orb"></canvas>
+  <div class="hero-top"><span>★ 4,8 на Яндекс Картах / 34 оценки</span><span>Казань, Копылова 3 / метро Авиастроительная / до 18:00</span></div>
+  <div class="hero-mid">
+    <h1>Красивая кожа <em>без лишних</em> назначений</h1>
+    <div class="who"><img src="../img/about.jpg" alt=""><span><b>Вероника</b>, косметолог / Казань</span></div>
+  </div>
+  <div class="hero-bot">
+    <p>Уход, инъекции и аппаратные процедуры. Сначала консультация, потом план.</p>
+    <div class="cta"><button class="btn" type="button" data-book="">Записаться</button><a class="btn ghost" href="#services">Смотреть цены</a></div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true"><div id="mq"></div></div>
+
+<section id="services">
+  <div class="head reveal"><h2>Услуги и цены</h2><p>Цена за одну процедуру. Курсы и препараты подбираются на консультации.</p></div>
+  <div id="services-list"></div>
+</section>
+
+<section class="works" id="works">
+  <div class="head reveal"><h2>Работы</h2><p>Губы, ботулинотерапия, чистки. Фото до и после из кабинета.</p></div>
+  <div class="strip" id="strip1"></div>
+  <div class="strip rev" id="strip2"></div>
+</section>
+
+<section class="about" id="about">
+  <div class="reveal"><h2>Обо мне</h2><p>Веду приём в кабинете на Копылова, 3. Не назначаю процедуры, которые вам не нужны: сначала консультация, затем понятный план и сроки.</p>
+    <div class="stats"><div><b>4,8</b><span>рейтинг</span></div><div><b>30</b><span>отзывов</span></div><div><b>33</b><span>процедуры</span></div></div></div>
+  <figure class="reveal"><img src="../img/cabinet/hero-wide.jpg" alt="Кабинет"></figure>
+</section>
+
+<section id="reviews">
+  <div class="head reveal"><h2>Отзывы</h2><p>30 отзывов на Яндекс Картах.</p></div>
+  <div class="reviews reveal" id="reviews-list"></div>
+</section>
+
+<footer id="contacts">
+  <div class="name">Вероника</div>
+  <div><p>Казань, ул. Копылова, 3 / метро Авиастроительная</p><p>До 18:00, по записи</p><p><a href="tel:+79179097604">+7 917 909-76-04</a></p></div>
+  <div class="cta"><a class="btn" href="https://t.me/Veronika_cosmetolog">Telegram</a><a class="btn" href="https://wa.me/79179097604">WhatsApp</a></div>
+</footer>
+
+<script src="../data.js"></script>
+<script src="shared.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu" crossorigin="anonymous"></script>
+<script>
+renderServices(document.getElementById('services-list'), 'cards');
+renderReviews(document.getElementById('reviews-list'), 3);
+const MQ = ['Чистка лица', 'Биоревитализация', 'Контурная пластика губ', 'Ботулинотерапия', 'Morpheus 8', 'Пилинги', 'Коктейль «Монако»', 'Микронидлинг'];
+document.getElementById('mq').innerHTML = [...MQ, ...MQ].map((t) => `<span>${esc(t)}</span>`).join('');
+const works = (n) => Array.from({ length: 15 }, (_, i) => `<figure><img src="../img/works/${String(i + 1).padStart(2, '0')}.jpg" alt="" loading="lazy"></figure>`).join('');
+document.getElementById('strip1').innerHTML = works() + works();
+document.getElementById('strip2').innerHTML = works() + works();
+
+// Дышащая сфера из частиц и два кольца; растёт и поворачивается по скроллу
+(() => {
+  const canvas = document.getElementById('orb');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(40, 1, .1, 20); camera.position.z = 4.2;
+  const group = new THREE.Group(); scene.add(group);
+  const N = 9000, pos = new Float32Array(N * 3), gr = Math.PI * (3 - Math.sqrt(5));
+  for (let i = 0; i < N; i++) { const y = 1 - (i / (N - 1)) * 2, r = Math.sqrt(1 - y * y), t = gr * i; pos[i * 3] = Math.cos(t) * r; pos[i * 3 + 1] = y; pos[i * 3 + 2] = Math.sin(t) * r; }
+  const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const u = { uTime: { value: 0 }, uPR: { value: renderer.getPixelRatio() } };
+  const mat = new THREE.ShaderMaterial({ uniforms: u, transparent: true, depthWrite: false,
+    vertexShader: `uniform float uTime; uniform float uPR; varying float vL; varying float vY;
+      void main(){ vec3 p = position; float n = sin(p.x*3.1+uTime*.7)*sin(p.y*2.7-uTime*.5)*sin(p.z*3.4+uTime*.6);
+        p *= 1.0 + .13*n; vec4 mv = modelViewMatrix*vec4(p,1.); gl_Position = projectionMatrix*mv;
+        gl_PointSize = (2.4+1.4*n)*uPR*(3.2/-mv.z); vL = .45+.55*clamp(n+.5,0.,1.); vY = position.y; }`,
+    fragmentShader: `varying float vL; varying float vY; void main(){ float r=length(gl_PointCoord-.5); if(r>.5) discard;
+      vec3 c = mix(vec3(.79,.56,.5), vec3(.79,.64,.42), smoothstep(-1.,1.,vY)); gl_FragColor = vec4(c, vL*.9*smoothstep(.5,.15,r)); }` });
+  group.add(new THREE.Points(geo, mat));
+  scene.add(new THREE.AmbientLight(0xffffff, .7)); const sun = new THREE.DirectionalLight(0xfff1dc, 1.1); sun.position.set(2, 3, 4); scene.add(sun);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(1.5, .014, 12, 220), new THREE.MeshStandardMaterial({ color: 0xd8b58a, metalness: .35, roughness: .4, emissive: 0x9a7a4c, emissiveIntensity: .35 })); ring.rotation.x = 1.25; group.add(ring);
+  const ring2 = new THREE.Mesh(new THREE.TorusGeometry(1.68, .007, 12, 220), new THREE.MeshStandardMaterial({ color: 0xe0b0a4, metalness: .3, roughness: .45, emissive: 0x9a5f55, emissiveIntensity: .3 })); ring2.rotation.set(2, .55, 0); group.add(ring2);
+  const resize = () => { const w = canvas.clientWidth, h = canvas.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); };
+  resize(); addEventListener('resize', resize);
+  const hero = document.getElementById('hero'), target = { x: 0, y: 0 }, cur = { x: 0, y: 0 };
+  hero.addEventListener('pointermove', (e) => { const r = hero.getBoundingClientRect(); target.x = ((e.clientX - r.left) / r.width) * 2 - 1; target.y = -(((e.clientY - r.top) / r.height) * 2 - 1); });
+  const clock = new THREE.Clock();
+  const render = () => {
+    const t = clock.getElapsedTime(); u.uTime.value = t;
+    cur.x += (target.x - cur.x) * .05; cur.y += (target.y - cur.y) * .05;
+    const sc = Math.min(1, scrollY / (hero.offsetHeight || 1));
+    group.rotation.y = cur.x * .35 + t * .06 + sc * 1.4; group.rotation.x = -cur.y * .25 + sc * .5;
+    const s = 1 + sc * .6; group.scale.set(s, s, s); group.position.y = -sc * .8;
+    ring.rotation.z += .0015; ring2.rotation.z -= .001;
+    renderer.render(scene, camera);
+  };
+  if (reduce) return render();
+  const loop = () => { if (!document.hidden) render(); requestAnimationFrame(loop); }; loop();
+})();
+</script>
+</body>
+</html>
